@@ -25,7 +25,7 @@ ans_data = np.loadtxt('testing_data2.txt', delimiter='|')
 ans_X = ans_data[:, :1000]
 
 clf = AdaBoostClassifier(n_estimators=10000, base_estimator=tree.DecisionTreeClassifier(compute_importances=None, criterion='gini',
-            max_depth=10, max_features=None, min_density=None,
+            max_depth=1, max_features=None, min_density=None,
             min_samples_leaf=1, min_samples_split=2, random_state=None,
             splitter='best'))
 clf.fit(X,Y)
