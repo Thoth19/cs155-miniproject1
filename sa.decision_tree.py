@@ -6,6 +6,7 @@ import random
 from sklearn import tree
 from sklearn import cross_validation
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals.six import StringIO  
 import datetime
 
@@ -14,22 +15,19 @@ import datetime
 # with np.loadtxt
 
 data = np.loadtxt('training_data2.txt', delimiter='|')
-X = data[0:3351, :1000]
-Y = data[0:3351, 1000]
-
-test_X = data[3351:, :1000]
-test_Y = data[3351:, 1000]
 X, test_X, Y, test_Y = cross_validation.train_test_split(data[:, :1000], data[:,1000],test_size=0.4)
+temp1 = data[:, :1000]
+temp2 = data[:, 1000]
 
 ans_data = np.loadtxt('testing_data2.txt', delimiter='|')
 ans_X = ans_data[:, :1000]
 
-clf = AdaBoostClassifier(n_estimators=10000, base_estimator=tree.DecisionTreeClassifier(compute_importances=None, criterion='gini',
-            max_depth=1, max_features=None, min_density=None,
-            min_samples_leaf=1, min_samples_split=2, random_state=None,
-            splitter='best'))
-clf.fit(X,Y)
-
+# clf = AdaBoostClassifier(n_estimators=50, base_estimator=tree.DecisionTreeClassifier(compute_importances=None, criterion='gini',
+#             max_depth=1, max_features=None, min_density=None,
+#             min_samples_leaf=1, min_samples_split=2, random_state=None,
+#             splitter='best'))
+clf = RandomForestClassifier()
+clf.fit(temp1,temp2)
 loss = 1 - clf.score(test_X, test_Y)
 
 
@@ -41,3 +39,6 @@ f.write("Id,Prediction\n")
 for i,j in enumerate(ans_Y):
     f.write("{},{}\n".format(i+1,int(j)))
 #we really like number 56 from the depth structure idk why
+# two hours with ada boost and it looked like this. still not enough
+# actually 157 minutes
+print loss
